@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
 
 <meta
@@ -12,7 +14,7 @@
 
 <title>Pizarra de Informática | TEMI</title>
 
-<!-- DICTADO LIBRE TEMI V3 -->
+<!-- DICTADO LIBRE TEMI V4 - ANTI DUPLICADOS -->
 
 <style>
 
@@ -25,7 +27,6 @@ body{
   font-family:Arial,Helvetica,sans-serif;
   background:#f3f6fb;
   color:#172033;
-  min-height:100vh;
 }
 
 header{
@@ -49,22 +50,22 @@ h1{
 }
 
 .subtitulo{
-  margin:8px 0 0;
+  margin-top:8px;
   font-size:21px;
-  opacity:.78;
+  opacity:.8;
 }
 
 .reloj{
-  text-align:right;
   font-size:28px;
   font-weight:bold;
+  text-align:right;
 }
 
 .fecha{
+  margin-top:5px;
   font-size:15px;
   font-weight:normal;
   opacity:.75;
-  margin-top:5px;
 }
 
 .contenedor{
@@ -74,7 +75,7 @@ h1{
 }
 
 
-/* BOTONES SUPERIORES */
+/* BOTONES PRINCIPALES */
 
 .menu{
   display:grid;
@@ -92,7 +93,7 @@ button{
 }
 
 .menu button{
-  min-height:75px;
+  min-height:76px;
   font-size:22px;
 }
 
@@ -117,21 +118,31 @@ button{
 }
 
 @keyframes pulso{
-  0%{transform:scale(1)}
-  50%{transform:scale(.97)}
-  100%{transform:scale(1)}
+
+  0%{
+    transform:scale(1);
+  }
+
+  50%{
+    transform:scale(.97);
+  }
+
+  100%{
+    transform:scale(1);
+  }
+
 }
 
 
-/* ESTADO DE VOZ */
+/* ESTADO DEL DICTADO */
 
 #estadoVoz{
-  min-height:35px;
+  min-height:38px;
   text-align:center;
   font-size:19px;
   font-weight:bold;
   color:#586477;
-  margin-bottom:6px;
+  margin-bottom:5px;
 }
 
 #estadoVoz.escuchando{
@@ -146,16 +157,16 @@ button{
   color:#d93636;
 }
 
-#textoProvisional{
+#provisional{
   min-height:30px;
   text-align:center;
-  color:#737d8e;
   font-style:italic;
+  color:#737d8e;
   margin-bottom:16px;
 }
 
 
-/* PANEL */
+/* NUEVA TAREA */
 
 .panel{
   background:white;
@@ -179,15 +190,15 @@ textarea,
 select{
   border:2px solid #dce2eb;
   border-radius:14px;
-  font-size:20px;
   background:white;
+  font-size:20px;
 }
 
 textarea{
-  min-height:100px;
+  min-height:120px;
   padding:16px;
-  font-family:inherit;
   resize:vertical;
+  font-family:inherit;
 }
 
 select{
@@ -201,20 +212,22 @@ select:focus{
 }
 
 #btnAgregar{
+  min-height:65px;
   background:#20a36d;
   color:white;
   font-size:21px;
-  min-height:65px;
 }
 
 .herramientas{
+  display:flex;
+  gap:10px;
   margin-top:12px;
 }
 
 .secundario{
+  padding:12px 18px;
   background:#edf1f6;
   color:#354052;
-  padding:12px 18px;
   font-size:16px;
 }
 
@@ -230,9 +243,9 @@ select:focus{
 
 .contador{
   background:white;
-  text-align:center;
   padding:20px;
   border-radius:18px;
+  text-align:center;
   box-shadow:0 3px 14px rgba(0,0,0,.06);
 }
 
@@ -291,7 +304,6 @@ select:focus{
 
 .info{
   flex:1;
-  min-width:0;
 }
 
 .texto{
@@ -336,10 +348,10 @@ select:focus{
 /* AYUDA */
 
 .ayuda{
-  background:#eaf1ff;
-  border-radius:18px;
-  padding:20px;
   margin-top:28px;
+  padding:20px;
+  border-radius:18px;
+  background:#eaf1ff;
   font-size:17px;
   line-height:1.6;
 }
@@ -366,7 +378,7 @@ select:focus{
 }
 
 
-/* CELULAR */
+/* RESPONSIVE */
 
 @media(max-width:760px){
 
@@ -402,10 +414,12 @@ select:focus{
 }
 
 </style>
+
 </head>
 
 
 <body>
+
 
 <header>
 
@@ -483,7 +497,7 @@ select:focus{
   </div>
 
 
-  <div id="textoProvisional">
+  <div id="provisional">
   </div>
 
 
@@ -558,9 +572,7 @@ select:focus{
       <span
         id="pendientes"
         class="numero">
-
         0
-
       </span>
 
       Pendientes
@@ -573,9 +585,7 @@ select:focus{
       <span
         id="terminadas"
         class="numero">
-
         0
-
       </span>
 
       Terminadas
@@ -588,9 +598,7 @@ select:focus{
       <span
         id="total"
         class="numero">
-
         0
-
       </span>
 
       Total
@@ -625,27 +633,27 @@ select:focus{
 
   <section class="ayuda">
 
-    <strong>🎙️ Dictado libre</strong>
+    <strong>
+      🎙️ Dictado libre V4
+    </strong>
 
     <p>
-      Toca <b>Hablar</b>.
-      Cuando aparezca
-      <b>Escuchando...</b>,
-      empieza a hablar.
-    </p>
-
-    <p>
-      Lo que TEMI vaya entendiendo
-      aparecerá automáticamente
-      dentro del cuadro de
+      Pulsa <b>Hablar</b>,
+      dicta normalmente y TEMI escribirá
+      lo que entienda en
       <b>Nueva tarea</b>.
     </p>
 
     <p>
-      Cuando termines,
-      toca <b>⛔ Detener</b>,
-      revisa el texto
-      y pulsa <b>＋ Agregar</b>.
+      Esta versión elimina frases
+      duplicadas automáticamente.
+    </p>
+
+    <p>
+      Cuando termines toca
+      <b>⛔ Detener</b>,
+      revisa el texto y pulsa
+      <b>＋ Agregar</b>.
     </p>
 
   </section>
@@ -662,9 +670,10 @@ select:focus{
 "use strict";
 
 
-/*
-  DICTADO LIBRE TEMI V3
-*/
+/* ==================================
+   DICTADO LIBRE TEMI V4
+   FILTRO ANTI DUPLICADOS
+================================== */
 
 
 const CLAVE =
@@ -683,8 +692,22 @@ let escuchando =
   false;
 
 
-let usuarioDetuvo =
-  false;
+/*
+  Guardamos las frases finales
+  recibidas durante esta sesión.
+*/
+
+let frasesSesion =
+  [];
+
+
+/*
+  Texto que ya había antes
+  de empezar a dictar.
+*/
+
+let textoInicial =
+  "";
 
 
 /* ELEMENTOS */
@@ -750,13 +773,15 @@ const estadoVoz =
   );
 
 
-const textoProvisional =
+const provisional =
   document.getElementById(
-    "textoProvisional"
+    "provisional"
   );
 
 
-/* GUARDAR */
+/* ==================================
+   ALMACENAMIENTO
+================================== */
 
 
 function cargar(){
@@ -779,14 +804,17 @@ function cargar(){
       !Array.isArray(tareas)
     ){
 
-      tareas = [];
+      tareas =
+        [];
 
     }
 
   }
+
   catch(error){
 
-    tareas = [];
+    tareas =
+      [];
 
   }
 
@@ -795,36 +823,34 @@ function cargar(){
 
 function guardar(){
 
-  localStorage.setItem(
+  try{
 
-    CLAVE,
+    localStorage.setItem(
 
-    JSON.stringify(
-      tareas
-    )
+      CLAVE,
 
-  );
+      JSON.stringify(
+        tareas
+      )
 
-}
+    );
 
+  }
 
-/* TAREAS */
+  catch(error){
 
+    mostrarAviso(
+      "No pude guardar las tareas"
+    );
 
-function crearId(){
-
-  return
-
-    Date.now()
-      .toString(36)
-
-    +
-
-    Math.random()
-      .toString(36)
-      .slice(2);
+  }
 
 }
+
+
+/* ==================================
+   TAREAS
+================================== */
 
 
 function agregarTarea(){
@@ -851,7 +877,7 @@ function agregarTarea(){
     id:
       Date.now().toString()
       +
-      Math.random(),
+      Math.random().toString(),
 
     texto:
       texto,
@@ -874,12 +900,20 @@ function agregarTarea(){
     "";
 
 
-  textoProvisional.textContent =
+  prioridad.value =
+    "media";
+
+
+  frasesSesion =
+    [];
+
+
+  textoInicial =
     "";
 
 
-  prioridad.value =
-    "media";
+  provisional.textContent =
+    "";
 
 
   mostrarAviso(
@@ -887,6 +921,11 @@ function agregarTarea(){
   );
 
 }
+
+
+/* ==================================
+   CAMBIAR ESTADO
+================================== */
 
 
 function cambiarEstado(id){
@@ -900,7 +939,9 @@ function cambiarEstado(id){
   if(
     !tarea
   ){
+
     return;
+
   }
 
 
@@ -913,6 +954,11 @@ function cambiarEstado(id){
   renderizar();
 
 }
+
+
+/* ==================================
+   ELIMINAR
+================================== */
 
 
 function eliminar(id){
@@ -930,6 +976,11 @@ function eliminar(id){
 }
 
 
+/* ==================================
+   LIMPIAR TERMINADAS
+================================== */
+
+
 function limpiarTerminadas(){
 
   tareas =
@@ -945,7 +996,9 @@ function limpiarTerminadas(){
 }
 
 
-/* DIBUJAR */
+/* ==================================
+   PRIORIDAD
+================================== */
 
 
 function nombrePrioridad(valor){
@@ -971,6 +1024,11 @@ function nombrePrioridad(valor){
   return "🟡 Prioridad media";
 
 }
+
+
+/* ==================================
+   RENDERIZAR
+================================== */
 
 
 function renderizar(){
@@ -1208,7 +1266,208 @@ function renderizar(){
 }
 
 
-/* LEER TAREAS */
+/* ==================================
+   TEXTO NORMALIZADO
+================================== */
+
+
+function normalizar(texto){
+
+  return texto
+
+    .toLowerCase()
+
+    .normalize("NFD")
+
+    .replace(
+      /[\u0300-\u036f]/g,
+      ""
+    )
+
+    .replace(
+      /[.,;:!?¿¡]/g,
+      ""
+    )
+
+    .replace(
+      /\s+/g,
+      " "
+    )
+
+    .trim();
+
+}
+
+
+/* ==================================
+   EVITAR DUPLICADOS
+================================== */
+
+
+function fraseYaExiste(frase){
+
+  const nueva =
+    normalizar(
+      frase
+    );
+
+
+  if(
+    nueva === ""
+  ){
+
+    return true;
+
+  }
+
+
+  return frasesSesion.some(
+
+    anterior => {
+
+      const vieja =
+        normalizar(
+          anterior
+        );
+
+
+      /*
+        Igual exacta.
+      */
+
+      if(
+        nueva === vieja
+      ){
+
+        return true;
+
+      }
+
+
+      /*
+        Una contiene completamente
+        a la otra.
+
+        Evita casos donde Chrome
+        devuelve primero:
+
+        "computadora una"
+
+        y luego:
+
+        "computadora una"
+      */
+
+      if(
+        vieja.length > 4
+
+        &&
+
+        nueva.length > 4
+
+        &&
+
+        (
+          vieja === nueva
+
+          ||
+
+          (
+            vieja.includes(
+              nueva
+            )
+
+            &&
+
+            nueva.length /
+            vieja.length
+            >
+            .8
+          )
+
+          ||
+
+          (
+            nueva.includes(
+              vieja
+            )
+
+            &&
+
+            vieja.length /
+            nueva.length
+            >
+            .8
+          )
+        )
+      ){
+
+        return true;
+
+      }
+
+
+      return false;
+
+    }
+
+  );
+
+}
+
+
+/* ==================================
+   RECONSTRUIR TEXTO
+================================== */
+
+
+function actualizarCuadro(){
+
+  const partes =
+    [];
+
+
+  if(
+    textoInicial.trim() !== ""
+  ){
+
+    partes.push(
+      textoInicial.trim()
+    );
+
+  }
+
+
+  frasesSesion.forEach(
+
+    frase => {
+
+      if(
+        frase.trim() !== ""
+      ){
+
+        partes.push(
+          frase.trim()
+        );
+
+      }
+
+    }
+
+  );
+
+
+  input.value =
+    partes.join(
+      " "
+    );
+
+}
+
+
+/* ==================================
+   VOZ PARA LEER
+================================== */
 
 
 function hablar(texto){
@@ -1247,6 +1506,11 @@ function hablar(texto){
   );
 
 }
+
+
+/* ==================================
+   LEER TAREAS
+================================== */
 
 
 function leerTareas(){
@@ -1309,7 +1573,9 @@ function leerTareas(){
 }
 
 
-/* DICTADO */
+/* ==================================
+   RECONOCIMIENTO DE VOZ
+================================== */
 
 
 const SpeechRecognition =
@@ -1319,105 +1585,6 @@ const SpeechRecognition =
   ||
 
   window.webkitSpeechRecognition;
-
-
-function mostrarEscuchando(){
-
-  escuchando =
-    true;
-
-
-  btnVoz.textContent =
-    "⛔ Detener";
-
-
-  btnVoz.classList.add(
-    "escuchando"
-  );
-
-
-  estadoVoz.textContent =
-    "🎙️ Escuchando... habla ahora";
-
-
-  estadoVoz.className =
-    "escuchando";
-
-}
-
-
-function mostrarDetenido(){
-
-  escuchando =
-    false;
-
-
-  btnVoz.textContent =
-    "🎙️ Hablar";
-
-
-  btnVoz.classList.remove(
-    "escuchando"
-  );
-
-}
-
-
-function agregarTextoAlCuadro(frase){
-
-  frase =
-    frase.trim();
-
-
-  if(
-    frase === ""
-  ){
-
-    return;
-
-  }
-
-
-  const anterior =
-    input.value.trim();
-
-
-  if(
-    anterior === ""
-  ){
-
-    input.value =
-      frase;
-
-  }
-
-  else{
-
-    input.value =
-      anterior
-      +
-      " "
-      +
-      frase;
-
-  }
-
-
-  /*
-    Esto confirma visualmente
-    que ya entró al cuadro.
-  */
-
-
-  estadoVoz.textContent =
-
-    "✍️ Escrito en Nueva tarea";
-
-
-  estadoVoz.className =
-    "correcto";
-
-}
 
 
 if(
@@ -1431,6 +1598,12 @@ if(
   reconocimiento.lang =
     "es-SV";
 
+
+  /*
+    Lo dejamos continuo,
+    PERO NO lo reiniciamos
+    automáticamente.
+  */
 
   reconocimiento.continuous =
     true;
@@ -1447,11 +1620,33 @@ if(
   reconocimiento.onstart =
     function(){
 
-      usuarioDetuvo =
-        false;
+      escuchando =
+        true;
 
 
-      mostrarEscuchando();
+      textoInicial =
+        input.value.trim();
+
+
+      frasesSesion =
+        [];
+
+
+      btnVoz.textContent =
+        "⛔ Detener";
+
+
+      btnVoz.classList.add(
+        "escuchando"
+      );
+
+
+      estadoVoz.textContent =
+        "🎙️ Escuchando... habla ahora";
+
+
+      estadoVoz.className =
+        "escuchando";
 
     };
 
@@ -1459,7 +1654,7 @@ if(
   reconocimiento.onresult =
     function(evento){
 
-      let provisional =
+      let temporal =
         "";
 
 
@@ -1478,7 +1673,8 @@ if(
         const frase =
           evento
             .results[i][0]
-            .transcript;
+            .transcript
+            .trim();
 
 
         if(
@@ -1487,16 +1683,34 @@ if(
             .isFinal
         ){
 
-          agregarTextoAlCuadro(
-            frase
-          );
+          /*
+            SOLO guardamos
+            si NO está repetida.
+          */
+
+          if(
+            !fraseYaExiste(
+              frase
+            )
+          ){
+
+            frasesSesion.push(
+              frase
+            );
+
+
+            actualizarCuadro();
+
+          }
 
         }
 
         else{
 
-          provisional +=
-            frase;
+          temporal +=
+            frase
+            +
+            " ";
 
         }
 
@@ -1504,14 +1718,14 @@ if(
 
 
       if(
-        provisional.trim() !== ""
+        temporal.trim() !== ""
       ){
 
-        textoProvisional.textContent =
+        provisional.textContent =
 
           '🎙️ Entendiendo: "'
           +
-          provisional.trim()
+          temporal.trim()
           +
           '"';
 
@@ -1519,7 +1733,7 @@ if(
 
       else{
 
-        textoProvisional.textContent =
+        provisional.textContent =
           "";
 
       }
@@ -1545,22 +1759,12 @@ if(
         "service-not-allowed"
       ){
 
-        usuarioDetuvo =
-          true;
-
-
-        mostrarDetenido();
-
-
         estadoVoz.textContent =
           "⚠️ Debes permitir el micrófono en Chrome";
 
 
         estadoVoz.className =
           "error";
-
-
-        return;
 
       }
 
@@ -1571,7 +1775,7 @@ if(
       ){
 
         estadoVoz.textContent =
-          "No escuché nada. Sigue hablando o vuelve a tocar Hablar.";
+          "No escuché nada";
 
       }
 
@@ -1581,53 +1785,25 @@ if(
   reconocimiento.onend =
     function(){
 
-      /*
-        Chrome de Android puede
-        terminar el reconocimiento solo.
-        Si nosotros seguimos en modo
-        escucha, lo iniciamos de nuevo.
-      */
+      escuchando =
+        false;
 
 
-      if(
-        escuchando
-
-        &&
-
-        !usuarioDetuvo
-      ){
-
-        setTimeout(
-
-          function(){
-
-            try{
-
-              reconocimiento.start();
-
-            }
-
-            catch(error){
-
-            }
-
-          },
-
-          300
-
-        );
+      btnVoz.textContent =
+        "🎙️ Hablar";
 
 
-        return;
+      btnVoz.classList.remove(
+        "escuchando"
+      );
 
-      }
 
-
-      mostrarDetenido();
+      provisional.textContent =
+        "";
 
 
       estadoVoz.textContent =
-        "⛔ Dictado detenido. Revisa el texto y toca Agregar";
+        "✅ Dictado terminado. Revisa el texto y toca Agregar";
 
 
       estadoVoz.className =
@@ -1638,7 +1814,9 @@ if(
 }
 
 
-/* BOTÓN HABLAR */
+/* ==================================
+   BOTÓN HABLAR / DETENER
+================================== */
 
 
 function comenzarOParar(){
@@ -1664,10 +1842,6 @@ function comenzarOParar(){
     escuchando
   ){
 
-    usuarioDetuvo =
-      true;
-
-
     try{
 
       reconocimiento.stop();
@@ -1679,16 +1853,9 @@ function comenzarOParar(){
     }
 
 
-    mostrarDetenido();
-
-
     return;
 
   }
-
-
-  usuarioDetuvo =
-    false;
 
 
   try{
@@ -1704,7 +1871,9 @@ function comenzarOParar(){
 }
 
 
-/* MÚSICA */
+/* ==================================
+   MÚSICA
+================================== */
 
 
 function abrirMusica(){
@@ -1715,7 +1884,9 @@ function abrirMusica(){
 }
 
 
-/* RELOJ */
+/* ==================================
+   RELOJ
+================================== */
 
 
 function actualizarReloj(){
@@ -1764,7 +1935,9 @@ function actualizarReloj(){
 }
 
 
-/* AVISO */
+/* ==================================
+   AVISO
+================================== */
 
 
 let tiempoAviso;
@@ -1811,7 +1984,9 @@ function mostrarAviso(texto){
 }
 
 
-/* EVENTOS */
+/* ==================================
+   EVENTOS
+================================== */
 
 
 btnVoz.onclick =
@@ -1841,7 +2016,15 @@ btnBorrarDictado.onclick =
       "";
 
 
-    textoProvisional.textContent =
+    textoInicial =
+      "";
+
+
+    frasesSesion =
+      [];
+
+
+    provisional.textContent =
       "";
 
 
@@ -1852,7 +2035,9 @@ btnBorrarDictado.onclick =
   };
 
 
-/* INICIO */
+/* ==================================
+   INICIO
+================================== */
 
 
 cargar();
@@ -1872,5 +2057,7 @@ setInterval(
 
 </script>
 
+
 </body>
+
 </html>

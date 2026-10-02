@@ -139,4 +139,462 @@ button{
   margin-bottom:5px;
 }
 
-.enc
+.encabezado-lista{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:30px 0 12px;
+  gap:15px;
+}
+
+.encabezado-lista h2{
+  margin:0;
+}
+
+.limpiar{
+  background:#eef2f7;
+  padding:10px 18px;
+  min-height:48px;
+  font-size:16px;
+}
+
+.tarea{
+  background:white;
+  margin:13px 0;
+  padding:18px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  box-shadow:0 3px 13px rgba(0,0,0,.06);
+  border-left:8px solid #e3aa32;
+}
+
+.tarea.alta{
+  border-left-color:#df4b4b;
+}
+
+.tarea.media{
+  border-left-color:#e3aa32;
+}
+
+.tarea.baja{
+  border-left-color:#72b943;
+}
+
+.tarea.completada{
+  opacity:.62;
+}
+
+.tarea.completada .texto{
+  text-decoration:line-through;
+}
+
+.info{
+  flex:1;
+  min-width:0;
+}
+
+.texto{
+  font-size:22px;
+  font-weight:600;
+  overflow-wrap:anywhere;
+}
+
+.prioridad{
+  margin-top:6px;
+  font-size:15px;
+  opacity:.65;
+}
+
+.acciones{
+  display:flex;
+  gap:8px;
+}
+
+.ok,.borrar{
+  width:58px;
+  height:58px;
+  min-height:58px;
+  font-size:24px;
+}
+
+.ok{
+  background:#e5f7ef;
+}
+
+.borrar{
+  background:#ffe8e8;
+}
+
+.vacio{
+  text-align:center;
+  padding:45px 15px;
+  color:#8791a4;
+  font-size:20px;
+}
+
+.aviso{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translateX(-50%);
+  background:#172033;
+  color:white;
+  padding:13px 22px;
+  border-radius:30px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:100;
+}
+
+.aviso.mostrar{
+  opacity:1;
+}
+
+@media(max-width:760px){
+  .cabecera{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .reloj{
+    text-align:left;
+  }
+
+  .formulario{
+    grid-template-columns:1fr;
+  }
+
+  .contadores{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .contador{
+    padding:16px 7px;
+    font-size:15px;
+  }
+
+  .numero{
+    font-size:30px;
+  }
+
+  .tarea{
+    align-items:flex-start;
+  }
+
+  .texto{
+    font-size:19px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="cabecera">
+    <div>
+      <h1>💻 Pizarra de Informática</h1>
+      <p>Salón de informática • Asistente TEMI 🤖</p>
+    </div>
+
+    <div class="reloj">
+      <div id="hora">--:--</div>
+      <div class="fecha" id="fecha"></div>
+    </div>
+  </div>
+</header>
+
+<main class="contenedor">
+
+  <section class="panel">
+    <h2>📋 Nueva tarea</h2>
+
+    <div class="formulario">
+      <input
+        id="nuevaTarea"
+        type="text"
+        maxlength="150"
+        autocomplete="off"
+        placeholder="Escribe aquí una tarea..."
+      >
+
+      <select id="prioridad" aria-label="Prioridad">
+        <option value="alta">🔴 Alta</option>
+        <option value="media" selected>🟡 Media</option>
+        <option value="baja">🟢 Baja</option>
+      </select>
+
+      <button id="btnAgregar" class="agregar" type="button">
+        ＋ Agregar
+      </button>
+    </div>
+  </section>
+
+  <section class="contadores">
+    <div class="contador">
+      <span class="numero" id="pendientes">0</span>
+      Pendientes
+    </div>
+
+    <div class="contador">
+      <span class="numero" id="terminadas">0</span>
+      Terminadas
+    </div>
+
+    <div class="contador">
+      <span class="numero" id="total">0</span>
+      Total
+    </div>
+  </section>
+
+  <div class="encabezado-lista">
+    <h2>📝 Tareas</h2>
+    <button id="btnLimpiar" class="limpiar" type="button">
+      Limpiar terminadas
+    </button>
+  </div>
+
+  <section id="lista"></section>
+
+</main>
+
+<div class="aviso" id="aviso"></div>
+
+<script>
+"use strict";
+
+const CLAVE = "tareasTemiV2";
+
+let tareas = [];
+
+const input = document.getElementById("nuevaTarea");
+const prioridad = document.getElementById("prioridad");
+const lista = document.getElementById("lista");
+const btnAgregar = document.getElementById("btnAgregar");
+const btnLimpiar = document.getElementById("btnLimpiar");
+
+function cargar(){
+  try{
+    const datos = localStorage.getItem(CLAVE);
+    tareas = datos ? JSON.parse(datos) : [];
+
+    if(!Array.isArray(tareas)){
+      tareas = [];
+    }
+  }catch(error){
+    console.error("Error al cargar:",error);
+    tareas = [];
+  }
+}
+
+function guardar(){
+  try{
+    localStorage.setItem(CLAVE,JSON.stringify(tareas));
+  }catch(error){
+    console.error("Error al guardar:",error);
+    mostrarAviso("No se pudieron guardar los cambios");
+  }
+}
+
+function crearId(){
+  return Date.now().toString(36) +
+         Math.random().toString(36).slice(2);
+}
+
+function agregarTarea(){
+  const texto = input.value.trim();
+
+  if(!texto){
+    mostrarAviso("Escribe una tarea primero");
+    input.focus();
+    return;
+  }
+
+  tareas.unshift({
+    id:crearId(),
+    texto:texto,
+    prioridad:prioridad.value,
+    completada:false,
+    creada:Date.now()
+  });
+
+  guardar();
+  renderizar();
+
+  input.value="";
+  prioridad.value="media";
+  input.focus();
+
+  mostrarAviso("✅ Tarea agregada");
+}
+
+function alternar(id){
+  const tarea = tareas.find(t => t.id === id);
+
+  if(!tarea) return;
+
+  tarea.completada = !tarea.completada;
+
+  guardar();
+  renderizar();
+}
+
+function eliminar(id){
+  tareas = tareas.filter(t => t.id !== id);
+
+  guardar();
+  renderizar();
+
+  mostrarAviso("🗑️ Tarea eliminada");
+}
+
+function limpiarTerminadas(){
+  const cantidad = tareas.filter(t => t.completada).length;
+
+  if(cantidad === 0){
+    mostrarAviso("No hay tareas terminadas");
+    return;
+  }
+
+  tareas = tareas.filter(t => !t.completada);
+
+  guardar();
+  renderizar();
+
+  mostrarAviso("Terminadas eliminadas");
+}
+
+function nombrePrioridad(valor){
+  if(valor === "alta") return "🔴 Prioridad alta";
+  if(valor === "baja") return "🟢 Prioridad baja";
+  return "🟡 Prioridad media";
+}
+
+function renderizar(){
+  lista.innerHTML="";
+
+  const pendientes = tareas.filter(t => !t.completada).length;
+  const terminadas = tareas.filter(t => t.completada).length;
+
+  document.getElementById("pendientes").textContent=pendientes;
+  document.getElementById("terminadas").textContent=terminadas;
+  document.getElementById("total").textContent=tareas.length;
+
+  if(tareas.length === 0){
+    const vacio=document.createElement("div");
+    vacio.className="vacio";
+    vacio.textContent="✨ No hay tareas todavía";
+    lista.appendChild(vacio);
+    return;
+  }
+
+  tareas.forEach(tarea => {
+
+    const elemento=document.createElement("article");
+
+    elemento.className=
+      "tarea " +
+      tarea.prioridad +
+      (tarea.completada ? " completada" : "");
+
+    const info=document.createElement("div");
+    info.className="info";
+
+    const texto=document.createElement("div");
+    texto.className="texto";
+    texto.textContent=tarea.texto;
+
+    const nivel=document.createElement("div");
+    nivel.className="prioridad";
+    nivel.textContent=nombrePrioridad(tarea.prioridad);
+
+    info.appendChild(texto);
+    info.appendChild(nivel);
+
+    const acciones=document.createElement("div");
+    acciones.className="acciones";
+
+    const botonOk=document.createElement("button");
+    botonOk.className="ok";
+    botonOk.type="button";
+    botonOk.textContent=tarea.completada ? "↩️" : "✅";
+    botonOk.title=tarea.completada
+      ? "Volver a pendiente"
+      : "Marcar como terminada";
+
+    botonOk.addEventListener("click",() => alternar(tarea.id));
+
+    const botonBorrar=document.createElement("button");
+    botonBorrar.className="borrar";
+    botonBorrar.type="button";
+    botonBorrar.textContent="🗑️";
+    botonBorrar.title="Eliminar tarea";
+
+    botonBorrar.addEventListener("click",() => eliminar(tarea.id));
+
+    acciones.appendChild(botonOk);
+    acciones.appendChild(botonBorrar);
+
+    elemento.appendChild(info);
+    elemento.appendChild(acciones);
+
+    lista.appendChild(elemento);
+  });
+}
+
+function actualizarReloj(){
+  const ahora=new Date();
+
+  document.getElementById("hora").textContent=
+    ahora.toLocaleTimeString("es-SV",{
+      hour:"2-digit",
+      minute:"2-digit"
+    });
+
+  document.getElementById("fecha").textContent=
+    ahora.toLocaleDateString("es-SV",{
+      weekday:"long",
+      day:"numeric",
+      month:"long",
+      year:"numeric"
+    });
+}
+
+let temporizadorAviso;
+
+function mostrarAviso(mensaje){
+  const aviso=document.getElementById("aviso");
+
+  aviso.textContent=mensaje;
+  aviso.classList.add("mostrar");
+
+  clearTimeout(temporizadorAviso);
+
+  temporizadorAviso=setTimeout(()=>{
+    aviso.classList.remove("mostrar");
+  },1800);
+}
+
+btnAgregar.addEventListener("click",agregarTarea);
+btnLimpiar.addEventListener("click",limpiarTerminadas);
+
+input.addEventListener("keydown",function(evento){
+  if(evento.key === "Enter"){
+    evento.preventDefault();
+    agregarTarea();
+  }
+});
+
+cargar();
+renderizar();
+actualizarReloj();
+
+setInterval(actualizarReloj,1000);
+
+</script>
+
+</body>
+  </html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pizarra de Informática</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f4f7fb;
+  color:#172033;
+}
+
+header{
+  background:#16233b;
+  color:white;
+  padding:25px 35px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+header h1{
+  margin:0;
+  font-size:32px;
+}
+
+header p{
+  margin:6px 0 0;
+  opacity:.75;
+}
+
+.reloj{
+  font-size:26px;
+  font-weight:bold;
+}
+
+.contenedor{
+  padding:30px;
+  max-width:1300px;
+  margin:auto;
+}
+
+.panel{
+  background:white;
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 4px 18px rgba(0,0,0,.08);
+}
+
+h2{
+  margin-top:0;
+  font-size:28px;
+}
+
+.formulario{
+  display:grid;
+  grid-template-columns:1fr 190px 160px;
+  gap:12px;
+}
+
+input,select,button{
+  font-size:20px;
+  padding:17px;
+  border-radius:12px;
+  border:1px solid #d6dce7;
+}
+
+input{
+  width:100%;
+}
+
+button{
+  border:none;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.agregar{
+  background:#1d9c67;
+  color:white;
+}
+
+.contadores{
+  display:flex;
+  gap:15px;
+  margin:25px 0;
+}
+
+.contador{
+  flex:1;
+  background:white;
+  padding:18px;
+  border-radius:14px;
+  text-align:center;
+  box-shadow:0 3px 12px rgba(0,0,0,.06);
+}
+
+.numero{
+  display:block;
+  font-size:30px;
+  font-weight:bold;
+}
+
+.tarea{
+  background:white;
+  margin:13px 0;
+  padding:18px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  box-shadow:0 3px 12px rgba(0,0,0,.06);
+  border-left:7px solid #e3aa32;
+}
+
+.tarea.alta{border-left-color:#df4b4b}
+.tarea.media{border-left-color:#e3aa32}
+.tarea.baja{border-left-color:#36a66b}
+
+.texto{
+  flex:1;
+  font-size:22px;
+}
+
+.prioridad{
+  font-size:15px;
+  opacity:.65;
+}
+
+.completada .texto{
+  text-decoration:line-through;
+  opacity:.45;
+}
+
+.ok{
+  background:#e5f7ef;
+  font-size:22px;
+}
+
+.borrar{
+  background:#ffe8e8;
+  font-size:22px;
+}
+
+.vacio{
+  text-align:center;
+  padding:45px;
+  color:#8791a4;
+  font-size:20px;
+}
+
+@media(max-width:750px){
+  .formulario{grid-template-columns:1fr}
+  header{flex-direction:column;align-items:flex-start}
+  .reloj{margin-top:15px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <h1>💻 Pizarra de Informática</h1>
+    <p>Salón de informática • Asistente TEMI</p>
+  </div>
+  <div class="reloj" id="reloj"></div>
+</header>
+
+<div class="contenedor">
+
+<div class="panel">
+  <h2>📋 Nueva tarea</h2>
+
+  <div class="formulario">
+    <input id="nuevaTarea"
+      placeholder="Escribe aquí una tarea..."
+      onkeydown="if(event.key==='Enter') agregarTarea()">
+
+    <select id="prioridad">
+      <option value="alta">🔴 Alta</option>
+      <option value="media" selected>🟡 Media</option>
+      <option value="baja">🟢 Baja</option>
+    </select>
+
+    <button class="agregar" onclick="agregarTarea()">
+      ＋ Agregar
+    </button>
+  </div>
+</div>
+
+<div class="contadores">
+  <div class="contador">
+    <span class="numero" id="pendientes">0</span>
+    Pendientes
+  </div>
+
+  <div class="contador">
+    <span class="numero" id="terminadas">0</span>
+    Terminadas
+  </div>
+
+  <div class="contador">
+    <span class="numero" id="total">0</span>
+    Total
+  </div>
+</div>
+
+<div id="lista"></div>
+
+</div>
+
+<script>
+let tareas = JSON.parse(localStorage.getItem("tareasTemi")) || [];
+
+function guardar(){
+  localStorage.setItem("tareasTemi",JSON.stringify(tareas));
+}
+
+function agregarTarea(){
+  const campo=document.getElementById("nuevaTarea");
+  const texto=campo.value.trim();
+
+  if(!texto

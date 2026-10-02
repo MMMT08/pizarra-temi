@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 <meta name="theme-color" content="#16233b">
+
 <title>Pizarra de Informática | TEMI</title>
 
 <style>
@@ -22,7 +23,7 @@ body{
 header{
   background:#16233b;
   color:white;
-  padding:28px 5%;
+  padding:24px 5%;
 }
 
 .cabecera{
@@ -31,7 +32,7 @@ header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:25px;
+  gap:20px;
 }
 
 header h1{
@@ -42,7 +43,7 @@ header h1{
 header p{
   margin:8px 0 0;
   font-size:clamp(17px,2.5vw,23px);
-  opacity:.75;
+  opacity:.78;
 }
 
 .reloj{
@@ -62,7 +63,55 @@ header p{
 .contenedor{
   max-width:1200px;
   margin:auto;
-  padding:30px 20px 60px;
+  padding:28px 20px 60px;
+}
+
+.menu-temi{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-bottom:22px;
+}
+
+.menu-temi button{
+  min-height:72px;
+  border:none;
+  border-radius:18px;
+  font-size:20px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.btn-voz{
+  background:#6b4eff;
+  color:white;
+}
+
+.btn-musica{
+  background:#ff3030;
+  color:white;
+}
+
+.btn-leer{
+  background:#1677d2;
+  color:white;
+}
+
+.estado-voz{
+  min-height:32px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  margin:4px 0 18px;
+  color:#596579;
+}
+
+.estado-voz.escuchando{
+  color:#6b4eff;
+}
+
+.estado-voz.error{
+  color:#d23c3c;
 }
 
 .panel{
@@ -112,7 +161,8 @@ button{
   color:white;
 }
 
-.agregar:active{
+.agregar:active,
+.menu-temi button:active{
   transform:scale(.98);
 }
 
@@ -234,6 +284,25 @@ button{
   font-size:20px;
 }
 
+.ayuda{
+  margin-top:28px;
+  background:#eaf1ff;
+  border-radius:18px;
+  padding:20px;
+  line-height:1.7;
+}
+
+.ayuda h3{
+  margin-top:0;
+  font-size:22px;
+}
+
+.ayuda code{
+  background:white;
+  border-radius:8px;
+  padding:4px 8px;
+}
+
 .aviso{
   position:fixed;
   left:50%;
@@ -261,6 +330,10 @@ button{
 
   .reloj{
     text-align:left;
+  }
+
+  .menu-temi{
+    grid-template-columns:1fr;
   }
 
   .formulario{
@@ -295,6 +368,7 @@ button{
 
 <header>
   <div class="cabecera">
+
     <div>
       <h1>💻 Pizarra de Informática</h1>
       <p>Salón de informática • Asistente TEMI 🤖</p>
@@ -304,15 +378,47 @@ button{
       <div id="hora">--:--</div>
       <div class="fecha" id="fecha"></div>
     </div>
+
   </div>
 </header>
 
 <main class="contenedor">
 
+  <section class="menu-temi">
+
+    <button
+      id="btnVoz"
+      class="btn-voz"
+      type="button">
+      🎙️ Hablar
+    </button>
+
+    <button
+      id="btnLeer"
+      class="btn-leer"
+      type="button">
+      🔊 Leer tareas
+    </button>
+
+    <button
+      id="btnMusica"
+      class="btn-musica"
+      type="button">
+      🎵 Música
+    </button>
+
+  </section>
+
+  <div id="estadoVoz" class="estado-voz">
+    Toca 🎙️ Hablar para dar una orden
+  </div>
+
   <section class="panel">
+
     <h2>📋 Nueva tarea</h2>
 
     <div class="formulario">
+
       <input
         id="nuevaTarea"
         type="text"
@@ -327,13 +433,19 @@ button{
         <option value="baja">🟢 Baja</option>
       </select>
 
-      <button id="btnAgregar" class="agregar" type="button">
+      <button
+        id="btnAgregar"
+        class="agregar"
+        type="button">
         ＋ Agregar
       </button>
+
     </div>
+
   </section>
 
   <section class="contadores">
+
     <div class="contador">
       <span class="numero" id="pendientes">0</span>
       Pendientes
@@ -348,16 +460,49 @@ button{
       <span class="numero" id="total">0</span>
       Total
     </div>
+
   </section>
 
   <div class="encabezado-lista">
+
     <h2>📝 Tareas</h2>
-    <button id="btnLimpiar" class="limpiar" type="button">
+
+    <button
+      id="btnLimpiar"
+      class="limpiar"
+      type="button">
       Limpiar terminadas
     </button>
+
   </div>
 
   <section id="lista"></section>
+
+  <section class="ayuda">
+
+    <h3>🎙️ Comandos de voz</h3>
+
+    <div>
+      <code>Agregar tarea revisar computadora 8</code>
+    </div>
+
+    <div>
+      <code>Agregar tarea urgente revisar impresora</code>
+    </div>
+
+    <div>
+      <code>Leer tareas</code>
+    </div>
+
+    <div>
+      <code>Terminar primera tarea</code>
+    </div>
+
+    <div>
+      <code>Abrir música</code>
+    </div>
+
+  </section>
 
 </main>
 
@@ -366,235 +511,1116 @@ button{
 <script>
 "use strict";
 
+/* =========================
+   DATOS
+========================= */
+
 const CLAVE = "tareasTemiV2";
 
 let tareas = [];
 
-const input = document.getElementById("nuevaTarea");
-const prioridad = document.getElementById("prioridad");
-const lista = document.getElementById("lista");
-const btnAgregar = document.getElementById("btnAgregar");
-const btnLimpiar = document.getElementById("btnLimpiar");
+const input =
+  document.getElementById("nuevaTarea");
+
+const prioridad =
+  document.getElementById("prioridad");
+
+const lista =
+  document.getElementById("lista");
+
+const btnAgregar =
+  document.getElementById("btnAgregar");
+
+const btnLimpiar =
+  document.getElementById("btnLimpiar");
+
+const btnVoz =
+  document.getElementById("btnVoz");
+
+const btnLeer =
+  document.getElementById("btnLeer");
+
+const btnMusica =
+  document.getElementById("btnMusica");
+
+const estadoVoz =
+  document.getElementById("estadoVoz");
+
+
+/* =========================
+   ALMACENAMIENTO
+========================= */
 
 function cargar(){
+
   try{
-    const datos = localStorage.getItem(CLAVE);
-    tareas = datos ? JSON.parse(datos) : [];
+
+    const datos =
+      localStorage.getItem(CLAVE);
+
+    tareas =
+      datos
+      ? JSON.parse(datos)
+      : [];
 
     if(!Array.isArray(tareas)){
-      tareas = [];
+      tareas=[];
     }
+
   }catch(error){
-    console.error("Error al cargar:",error);
-    tareas = [];
+
+    console.error(
+      "Error al cargar:",
+      error
+    );
+
+    tareas=[];
+
   }
+
 }
+
 
 function guardar(){
+
   try{
-    localStorage.setItem(CLAVE,JSON.stringify(tareas));
+
+    localStorage.setItem(
+      CLAVE,
+      JSON.stringify(tareas)
+    );
+
   }catch(error){
-    console.error("Error al guardar:",error);
-    mostrarAviso("No se pudieron guardar los cambios");
+
+    console.error(
+      "Error al guardar:",
+      error
+    );
+
+    mostrarAviso(
+      "No se pudieron guardar los cambios"
+    );
+
   }
+
 }
+
 
 function crearId(){
-  return Date.now().toString(36) +
-         Math.random().toString(36).slice(2);
+
+  return (
+    Date.now().toString(36)
+    +
+    Math.random()
+      .toString(36)
+      .slice(2)
+  );
+
 }
 
-function agregarTarea(){
-  const texto = input.value.trim();
+
+/* =========================
+   TAREAS
+========================= */
+
+function agregarTarea(
+  textoManual=null,
+  prioridadManual=null
+){
+
+  const texto =
+    textoManual !== null
+    ? textoManual.trim()
+    : input.value.trim();
 
   if(!texto){
-    mostrarAviso("Escribe una tarea primero");
+
+    mostrarAviso(
+      "Escribe una tarea primero"
+    );
+
     input.focus();
+
     return;
+
   }
 
   tareas.unshift({
+
     id:crearId(),
+
     texto:texto,
-    prioridad:prioridad.value,
+
+    prioridad:
+      prioridadManual
+      ||
+      prioridad.value,
+
     completada:false,
+
     creada:Date.now()
+
   });
 
   guardar();
+
   renderizar();
 
   input.value="";
-  prioridad.value="media";
-  input.focus();
 
-  mostrarAviso("✅ Tarea agregada");
+  prioridad.value="media";
+
+  mostrarAviso(
+    "✅ Tarea agregada"
+  );
+
 }
+
 
 function alternar(id){
-  const tarea = tareas.find(t => t.id === id);
 
-  if(!tarea) return;
+  const tarea =
+    tareas.find(
+      t => t.id === id
+    );
 
-  tarea.completada = !tarea.completada;
+  if(!tarea){
+    return;
+  }
+
+  tarea.completada =
+    !tarea.completada;
 
   guardar();
+
   renderizar();
+
 }
+
 
 function eliminar(id){
-  tareas = tareas.filter(t => t.id !== id);
+
+  tareas =
+    tareas.filter(
+      t => t.id !== id
+    );
 
   guardar();
+
   renderizar();
 
-  mostrarAviso("🗑️ Tarea eliminada");
+  mostrarAviso(
+    "🗑️ Tarea eliminada"
+  );
+
 }
+
 
 function limpiarTerminadas(){
-  const cantidad = tareas.filter(t => t.completada).length;
+
+  const cantidad =
+    tareas.filter(
+      t => t.completada
+    ).length;
 
   if(cantidad === 0){
-    mostrarAviso("No hay tareas terminadas");
+
+    mostrarAviso(
+      "No hay tareas terminadas"
+    );
+
     return;
+
   }
 
-  tareas = tareas.filter(t => !t.completada);
+  tareas =
+    tareas.filter(
+      t => !t.completada
+    );
 
   guardar();
+
   renderizar();
 
-  mostrarAviso("Terminadas eliminadas");
+  mostrarAviso(
+    "Terminadas eliminadas"
+  );
+
 }
 
-function nombrePrioridad(valor){
-  if(valor === "alta") return "🔴 Prioridad alta";
-  if(valor === "baja") return "🟢 Prioridad baja";
-  return "🟡 Prioridad media";
-}
 
-function renderizar(){
-  lista.innerHTML="";
+function terminarPrimeraPendiente(){
 
-  const pendientes = tareas.filter(t => !t.completada).length;
-  const terminadas = tareas.filter(t => t.completada).length;
+  const tarea =
+    tareas.find(
+      t => !t.completada
+    );
 
-  document.getElementById("pendientes").textContent=pendientes;
-  document.getElementById("terminadas").textContent=terminadas;
-  document.getElementById("total").textContent=tareas.length;
+  if(!tarea){
 
-  if(tareas.length === 0){
-    const vacio=document.createElement("div");
-    vacio.className="vacio";
-    vacio.textContent="✨ No hay tareas todavía";
-    lista.appendChild(vacio);
+    hablar(
+      "No hay tareas pendientes."
+    );
+
     return;
+
   }
 
-  tareas.forEach(tarea => {
+  tarea.completada=true;
 
-    const elemento=document.createElement("article");
+  guardar();
 
-    elemento.className=
-      "tarea " +
-      tarea.prioridad +
-      (tarea.completada ? " completada" : "");
+  renderizar();
 
-    const info=document.createElement("div");
-    info.className="info";
+  hablar(
+    "Tarea completada: "
+    + tarea.texto
+  );
 
-    const texto=document.createElement("div");
-    texto.className="texto";
-    texto.textContent=tarea.texto;
-
-    const nivel=document.createElement("div");
-    nivel.className="prioridad";
-    nivel.textContent=nombrePrioridad(tarea.prioridad);
-
-    info.appendChild(texto);
-    info.appendChild(nivel);
-
-    const acciones=document.createElement("div");
-    acciones.className="acciones";
-
-    const botonOk=document.createElement("button");
-    botonOk.className="ok";
-    botonOk.type="button";
-    botonOk.textContent=tarea.completada ? "↩️" : "✅";
-    botonOk.title=tarea.completada
-      ? "Volver a pendiente"
-      : "Marcar como terminada";
-
-    botonOk.addEventListener("click",() => alternar(tarea.id));
-
-    const botonBorrar=document.createElement("button");
-    botonBorrar.className="borrar";
-    botonBorrar.type="button";
-    botonBorrar.textContent="🗑️";
-    botonBorrar.title="Eliminar tarea";
-
-    botonBorrar.addEventListener("click",() => eliminar(tarea.id));
-
-    acciones.appendChild(botonOk);
-    acciones.appendChild(botonBorrar);
-
-    elemento.appendChild(info);
-    elemento.appendChild(acciones);
-
-    lista.appendChild(elemento);
-  });
 }
+
+
+function nombrePrioridad(valor){
+
+  if(valor === "alta"){
+    return "🔴 Prioridad alta";
+  }
+
+  if(valor === "baja"){
+    return "🟢 Prioridad baja";
+  }
+
+  return "🟡 Prioridad media";
+
+}
+
+
+/* =========================
+   DIBUJAR TAREAS
+========================= */
+
+function renderizar(){
+
+  lista.innerHTML="";
+
+  const pendientes =
+    tareas.filter(
+      t => !t.completada
+    ).length;
+
+  const terminadas =
+    tareas.filter(
+      t => t.completada
+    ).length;
+
+  document
+    .getElementById("pendientes")
+    .textContent =
+    pendientes;
+
+  document
+    .getElementById("terminadas")
+    .textContent =
+    terminadas;
+
+  document
+    .getElementById("total")
+    .textContent =
+    tareas.length;
+
+
+  if(tareas.length === 0){
+
+    const vacio =
+      document.createElement(
+        "div"
+      );
+
+    vacio.className =
+      "vacio";
+
+    vacio.textContent =
+      "✨ No hay tareas todavía";
+
+    lista.appendChild(
+      vacio
+    );
+
+    return;
+
+  }
+
+
+  tareas.forEach(
+    tarea => {
+
+      const elemento =
+        document.createElement(
+          "article"
+        );
+
+      elemento.className =
+        "tarea "
+        +
+        tarea.prioridad
+        +
+        (
+          tarea.completada
+          ? " completada"
+          : ""
+        );
+
+
+      const info =
+        document.createElement(
+          "div"
+        );
+
+      info.className =
+        "info";
+
+
+      const texto =
+        document.createElement(
+          "div"
+        );
+
+      texto.className =
+        "texto";
+
+      texto.textContent =
+        tarea.texto;
+
+
+      const nivel =
+        document.createElement(
+          "div"
+        );
+
+      nivel.className =
+        "prioridad";
+
+      nivel.textContent =
+        nombrePrioridad(
+          tarea.prioridad
+        );
+
+
+      info.appendChild(
+        texto
+      );
+
+      info.appendChild(
+        nivel
+      );
+
+
+      const acciones =
+        document.createElement(
+          "div"
+        );
+
+      acciones.className =
+        "acciones";
+
+
+      const botonOk =
+        document.createElement(
+          "button"
+        );
+
+      botonOk.className =
+        "ok";
+
+      botonOk.type =
+        "button";
+
+      botonOk.textContent =
+        tarea.completada
+        ? "↩️"
+        : "✅";
+
+      botonOk.addEventListener(
+        "click",
+        () => alternar(tarea.id)
+      );
+
+
+      const botonBorrar =
+        document.createElement(
+          "button"
+        );
+
+      botonBorrar.className =
+        "borrar";
+
+      botonBorrar.type =
+        "button";
+
+      botonBorrar.textContent =
+        "🗑️";
+
+      botonBorrar.addEventListener(
+        "click",
+        () => eliminar(tarea.id)
+      );
+
+
+      acciones.appendChild(
+        botonOk
+      );
+
+      acciones.appendChild(
+        botonBorrar
+      );
+
+
+      elemento.appendChild(
+        info
+      );
+
+      elemento.appendChild(
+        acciones
+      );
+
+      lista.appendChild(
+        elemento
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================
+   VOZ DE TEMI / NAVEGADOR
+========================= */
+
+function hablar(texto){
+
+  if(
+    !("speechSynthesis" in window)
+  ){
+
+    mostrarAviso(
+      "Este navegador no permite voz"
+    );
+
+    return;
+
+  }
+
+  window
+    .speechSynthesis
+    .cancel();
+
+
+  const mensaje =
+    new SpeechSynthesisUtterance(
+      texto
+    );
+
+  mensaje.lang =
+    "es-ES";
+
+  mensaje.rate =
+    0.95;
+
+  mensaje.pitch =
+    1;
+
+
+  window
+    .speechSynthesis
+    .speak(
+      mensaje
+    );
+
+}
+
+
+/* =========================
+   LEER TAREAS
+========================= */
+
+function leerTareas(){
+
+  const pendientes =
+    tareas.filter(
+      t => !t.completada
+    );
+
+  if(pendientes.length === 0){
+
+    hablar(
+      "No hay tareas pendientes."
+    );
+
+    return;
+
+  }
+
+  let texto =
+    "Hay "
+    +
+    pendientes.length
+    +
+    (
+      pendientes.length === 1
+      ? " tarea pendiente. "
+      : " tareas pendientes. "
+    );
+
+
+  pendientes
+    .slice(0,10)
+    .forEach(
+      (tarea,index) => {
+
+        texto +=
+          "Tarea "
+          +
+          (index + 1)
+          +
+          ": "
+          +
+          tarea.texto
+          +
+          ". ";
+
+      }
+    );
+
+
+  hablar(texto);
+
+}
+
+
+/* =========================
+   RECONOCIMIENTO DE VOZ
+========================= */
+
+const SpeechRecognition =
+  window.SpeechRecognition
+  ||
+  window.webkitSpeechRecognition;
+
+
+let reconocimiento=null;
+
+
+if(SpeechRecognition){
+
+  reconocimiento =
+    new SpeechRecognition();
+
+  reconocimiento.lang =
+    "es-SV";
+
+  reconocimiento.continuous =
+    false;
+
+  reconocimiento.interimResults =
+    false;
+
+  reconocimiento.maxAlternatives =
+    1;
+
+
+  reconocimiento.onstart =
+    function(){
+
+      estadoVoz.textContent =
+        "🎙️ Escuchando...";
+
+      estadoVoz.className =
+        "estado-voz escuchando";
+
+    };
+
+
+  reconocimiento.onend =
+    function(){
+
+      if(
+        estadoVoz.textContent
+        ===
+        "🎙️ Escuchando..."
+      ){
+
+        estadoVoz.textContent =
+          "Toca 🎙️ Hablar para dar una orden";
+
+        estadoVoz.className =
+          "estado-voz";
+
+      }
+
+    };
+
+
+  reconocimiento.onerror =
+    function(evento){
+
+      console.error(
+        "Error de voz:",
+        evento.error
+      );
+
+      estadoVoz.textContent =
+        "⚠️ No pude escuchar. Intenta nuevamente.";
+
+      estadoVoz.className =
+        "estado-voz error";
+
+    };
+
+
+  reconocimiento.onresult =
+    function(evento){
+
+      const frase =
+        evento
+          .results[0][0]
+          .transcript
+          .trim();
+
+      estadoVoz.textContent =
+        'Escuché: "'
+        +
+        frase
+        +
+        '"';
+
+      estadoVoz.className =
+        "estado-voz";
+
+      procesarComando(
+        frase
+      );
+
+    };
+
+}
+
+
+/* =========================
+   BOTÓN HABLAR
+========================= */
+
+function iniciarEscucha(){
+
+  if(!reconocimiento){
+
+    estadoVoz.textContent =
+      "⚠️ Este navegador no admite reconocimiento de voz.";
+
+    estadoVoz.className =
+      "estado-voz error";
+
+    return;
+
+  }
+
+  try{
+
+    reconocimiento.start();
+
+  }catch(error){
+
+    console.log(error);
+
+  }
+
+}
+
+
+/* =========================
+   INTERPRETAR COMANDOS
+========================= */
+
+function normalizar(texto){
+
+  return texto
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(
+      /[\u0300-\u036f]/g,
+      ""
+    )
+    .trim();
+
+}
+
+
+function procesarComando(fraseOriginal){
+
+  const frase =
+    normalizar(
+      fraseOriginal
+    );
+
+
+  /* LEER TAREAS */
+
+  if(
+    frase.includes(
+      "leer tareas"
+    )
+    ||
+    frase.includes(
+      "lee las tareas"
+    )
+    ||
+    frase.includes(
+      "tareas pendientes"
+    )
+  ){
+
+    leerTareas();
+
+    return;
+
+  }
+
+
+  /* TERMINAR PRIMERA */
+
+  if(
+    frase.includes(
+      "terminar primera tarea"
+    )
+    ||
+    frase.includes(
+      "termina la primera tarea"
+    )
+    ||
+    frase.includes(
+      "marcar primera tarea como terminada"
+    )
+    ||
+    frase.includes(
+      "completar primera tarea"
+    )
+  ){
+
+    terminarPrimeraPendiente();
+
+    return;
+
+  }
+
+
+  /* MÚSICA */
+
+  if(
+    frase.includes(
+      "abrir musica"
+    )
+    ||
+    frase.includes(
+      "poner musica"
+    )
+    ||
+    frase === "musica"
+  ){
+
+    hablar(
+      "Abriendo música."
+    );
+
+    setTimeout(
+      () => {
+        window.location.href =
+          "https://m.youtube.com/";
+      },
+      800
+    );
+
+    return;
+
+  }
+
+
+  /* AGREGAR TAREA */
+
+  if(
+    frase.startsWith(
+      "agregar tarea"
+    )
+    ||
+    frase.startsWith(
+      "anadir tarea"
+    )
+    ||
+    frase.startsWith(
+      "crear tarea"
+    )
+  ){
+
+    let texto =
+      fraseOriginal
+        .replace(
+          /^(agregar|añadir|anadir|crear)\s+tarea\s*/i,
+          ""
+        )
+        .trim();
+
+
+    let nivel =
+      "media";
+
+
+    const textoNormalizado =
+      normalizar(texto);
+
+
+    if(
+      textoNormalizado.includes(
+        "urgente"
+      )
+      ||
+      textoNormalizado.includes(
+        "prioridad alta"
+      )
+    ){
+
+      nivel =
+        "alta";
+
+      texto =
+        texto
+          .replace(
+            /urgente/ig,
+            ""
+          )
+          .replace(
+            /prioridad alta/ig,
+            ""
+          )
+          .trim();
+
+    }
+
+
+    if(
+      textoNormalizado.includes(
+        "prioridad baja"
+      )
+    ){
+
+      nivel =
+        "baja";
+
+      texto =
+        texto
+          .replace(
+            /prioridad baja/ig,
+            ""
+          )
+          .trim();
+
+    }
+
+
+    if(!texto){
+
+      hablar(
+        "No entendí cuál es la tarea."
+      );
+
+      return;
+
+    }
+
+
+    agregarTarea(
+      texto,
+      nivel
+    );
+
+
+    hablar(
+      "Tarea agregada: "
+      +
+      texto
+    );
+
+    return;
+
+  }
+
+
+  /* NO ENTENDIDO */
+
+  hablar(
+    "No entendí el comando."
+  );
+
+}
+
+
+/* =========================
+   MÚSICA
+========================= */
+
+function abrirMusica(){
+
+  window.location.href =
+    "https://m.youtube.com/";
+
+}
+
+
+/* =========================
+   RELOJ
+========================= */
 
 function actualizarReloj(){
-  const ahora=new Date();
 
-  document.getElementById("hora").textContent=
-    ahora.toLocaleTimeString("es-SV",{
-      hour:"2-digit",
-      minute:"2-digit"
-    });
+  const ahora =
+    new Date();
 
-  document.getElementById("fecha").textContent=
-    ahora.toLocaleDateString("es-SV",{
-      weekday:"long",
-      day:"numeric",
-      month:"long",
-      year:"numeric"
-    });
+
+  document
+    .getElementById("hora")
+    .textContent =
+    ahora.toLocaleTimeString(
+      "es-SV",
+      {
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    );
+
+
+  document
+    .getElementById("fecha")
+    .textContent =
+    ahora.toLocaleDateString(
+      "es-SV",
+      {
+        weekday:"long",
+        day:"numeric",
+        month:"long",
+        year:"numeric"
+      }
+    );
+
 }
+
+
+/* =========================
+   AVISOS
+========================= */
 
 let temporizadorAviso;
 
+
 function mostrarAviso(mensaje){
-  const aviso=document.getElementById("aviso");
 
-  aviso.textContent=mensaje;
-  aviso.classList.add("mostrar");
+  const aviso =
+    document.getElementById(
+      "aviso"
+    );
 
-  clearTimeout(temporizadorAviso);
+  aviso.textContent =
+    mensaje;
 
-  temporizadorAviso=setTimeout(()=>{
-    aviso.classList.remove("mostrar");
-  },1800);
+  aviso.classList.add(
+    "mostrar"
+  );
+
+  clearTimeout(
+    temporizadorAviso
+  );
+
+
+  temporizadorAviso =
+    setTimeout(
+      () => {
+
+        aviso.classList.remove(
+          "mostrar"
+        );
+
+      },
+      1800
+    );
+
 }
 
-btnAgregar.addEventListener("click",agregarTarea);
-btnLimpiar.addEventListener("click",limpiarTerminadas);
 
-input.addEventListener("keydown",function(evento){
-  if(evento.key === "Enter"){
-    evento.preventDefault();
-    agregarTarea();
+/* =========================
+   EVENTOS
+========================= */
+
+btnAgregar.addEventListener(
+  "click",
+  () => agregarTarea()
+);
+
+
+btnLimpiar.addEventListener(
+  "click",
+  limpiarTerminadas
+);
+
+
+btnVoz.addEventListener(
+  "click",
+  iniciarEscucha
+);
+
+
+btnLeer.addEventListener(
+  "click",
+  leerTareas
+);
+
+
+btnMusica.addEventListener(
+  "click",
+  abrirMusica
+);
+
+
+input.addEventListener(
+  "keydown",
+  function(evento){
+
+    if(
+      evento.key === "Enter"
+    ){
+
+      evento.preventDefault();
+
+      agregarTarea();
+
+    }
+
   }
-});
+);
+
+
+/* =========================
+   INICIO
+========================= */
 
 cargar();
+
 renderizar();
+
 actualizarReloj();
 
-setInterval(actualizarReloj,1000);
+setInterval(
+  actualizarReloj,
+  1000
+);
 
 </script>
 
 </body>
-  </html>
+</html>

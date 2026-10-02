@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
 
 <meta
@@ -14,7 +12,7 @@
 
 <title>Pizarra de Informática | TEMI</title>
 
-<!-- DICTADO LIBRE TEMI V4 - ANTI DUPLICADOS -->
+<!-- TEMI V5 - MODO COMPATIBLE -->
 
 <style>
 
@@ -27,6 +25,7 @@ body{
   font-family:Arial,Helvetica,sans-serif;
   background:#f3f6fb;
   color:#172033;
+  min-height:100vh;
 }
 
 header{
@@ -75,7 +74,7 @@ h1{
 }
 
 
-/* BOTONES PRINCIPALES */
+/* BOTONES */
 
 .menu{
   display:grid;
@@ -104,7 +103,6 @@ button{
 
 #btnVoz.escuchando{
   background:#d93636;
-  animation:pulso 1s infinite;
 }
 
 #btnLeer{
@@ -117,32 +115,16 @@ button{
   color:white;
 }
 
-@keyframes pulso{
 
-  0%{
-    transform:scale(1);
-  }
-
-  50%{
-    transform:scale(.97);
-  }
-
-  100%{
-    transform:scale(1);
-  }
-
-}
-
-
-/* ESTADO DEL DICTADO */
+/* ESTADO */
 
 #estadoVoz{
-  min-height:38px;
+  min-height:42px;
   text-align:center;
   font-size:19px;
   font-weight:bold;
   color:#586477;
-  margin-bottom:5px;
+  margin-bottom:16px;
 }
 
 #estadoVoz.escuchando{
@@ -157,16 +139,8 @@ button{
   color:#d93636;
 }
 
-#provisional{
-  min-height:30px;
-  text-align:center;
-  font-style:italic;
-  color:#737d8e;
-  margin-bottom:16px;
-}
 
-
-/* NUEVA TAREA */
+/* PANEL */
 
 .panel{
   background:white;
@@ -414,12 +388,10 @@ select:focus{
 }
 
 </style>
-
 </head>
 
 
 <body>
-
 
 <header>
 
@@ -491,13 +463,7 @@ select:focus{
 
 
   <div id="estadoVoz">
-
-    Toca 🎙️ Hablar y dicta libremente
-
-  </div>
-
-
-  <div id="provisional">
+    Toca 🎙️ Hablar y di una frase
   </div>
 
 
@@ -526,9 +492,7 @@ select:focus{
         <option
           value="media"
           selected>
-
           🟡 Media
-
         </option>
 
         <option value="baja">
@@ -634,26 +598,23 @@ select:focus{
   <section class="ayuda">
 
     <strong>
-      🎙️ Dictado libre V4
+      🎙️ Modo TEMI V5
     </strong>
 
     <p>
-      Pulsa <b>Hablar</b>,
-      dicta normalmente y TEMI escribirá
-      lo que entienda en
-      <b>Nueva tarea</b>.
+      Toca <b>Hablar</b> y di una frase.
     </p>
 
     <p>
-      Esta versión elimina frases
-      duplicadas automáticamente.
+      TEMI escuchará una sola vez,
+      escribirá lo que entienda
+      y cerrará el micrófono automáticamente.
     </p>
 
     <p>
-      Cuando termines toca
-      <b>⛔ Detener</b>,
-      revisa el texto y pulsa
-      <b>＋ Agregar</b>.
+      Si quieres añadir otra frase,
+      toca <b>Hablar</b> nuevamente.
+      La nueva frase se agregará al texto anterior.
     </p>
 
   </section>
@@ -670,10 +631,9 @@ select:focus{
 "use strict";
 
 
-/* ==================================
-   DICTADO LIBRE TEMI V4
-   FILTRO ANTI DUPLICADOS
-================================== */
+/* ===============================
+   TEMI V5 - MODO COMPATIBLE
+================================ */
 
 
 const CLAVE =
@@ -692,21 +652,7 @@ let escuchando =
   false;
 
 
-/*
-  Guardamos las frases finales
-  recibidas durante esta sesión.
-*/
-
-let frasesSesion =
-  [];
-
-
-/*
-  Texto que ya había antes
-  de empezar a dictar.
-*/
-
-let textoInicial =
+let ultimoResultado =
   "";
 
 
@@ -773,15 +719,9 @@ const estadoVoz =
   );
 
 
-const provisional =
-  document.getElementById(
-    "provisional"
-  );
-
-
-/* ==================================
-   ALMACENAMIENTO
-================================== */
+/* ===============================
+   GUARDAR / CARGAR
+================================ */
 
 
 function cargar(){
@@ -848,9 +788,9 @@ function guardar(){
 }
 
 
-/* ==================================
+/* ===============================
    TAREAS
-================================== */
+================================ */
 
 
 function agregarTarea(){
@@ -904,15 +844,7 @@ function agregarTarea(){
     "media";
 
 
-  frasesSesion =
-    [];
-
-
-  textoInicial =
-    "";
-
-
-  provisional.textContent =
+  ultimoResultado =
     "";
 
 
@@ -923,9 +855,9 @@ function agregarTarea(){
 }
 
 
-/* ==================================
-   CAMBIAR ESTADO
-================================== */
+/* ===============================
+   ESTADO TAREA
+================================ */
 
 
 function cambiarEstado(id){
@@ -956,9 +888,9 @@ function cambiarEstado(id){
 }
 
 
-/* ==================================
+/* ===============================
    ELIMINAR
-================================== */
+================================ */
 
 
 function eliminar(id){
@@ -976,9 +908,9 @@ function eliminar(id){
 }
 
 
-/* ==================================
+/* ===============================
    LIMPIAR TERMINADAS
-================================== */
+================================ */
 
 
 function limpiarTerminadas(){
@@ -996,9 +928,9 @@ function limpiarTerminadas(){
 }
 
 
-/* ==================================
+/* ===============================
    PRIORIDAD
-================================== */
+================================ */
 
 
 function nombrePrioridad(valor){
@@ -1026,9 +958,9 @@ function nombrePrioridad(valor){
 }
 
 
-/* ==================================
+/* ===============================
    RENDERIZAR
-================================== */
+================================ */
 
 
 function renderizar(){
@@ -1266,208 +1198,9 @@ function renderizar(){
 }
 
 
-/* ==================================
-   TEXTO NORMALIZADO
-================================== */
-
-
-function normalizar(texto){
-
-  return texto
-
-    .toLowerCase()
-
-    .normalize("NFD")
-
-    .replace(
-      /[\u0300-\u036f]/g,
-      ""
-    )
-
-    .replace(
-      /[.,;:!?¿¡]/g,
-      ""
-    )
-
-    .replace(
-      /\s+/g,
-      " "
-    )
-
-    .trim();
-
-}
-
-
-/* ==================================
-   EVITAR DUPLICADOS
-================================== */
-
-
-function fraseYaExiste(frase){
-
-  const nueva =
-    normalizar(
-      frase
-    );
-
-
-  if(
-    nueva === ""
-  ){
-
-    return true;
-
-  }
-
-
-  return frasesSesion.some(
-
-    anterior => {
-
-      const vieja =
-        normalizar(
-          anterior
-        );
-
-
-      /*
-        Igual exacta.
-      */
-
-      if(
-        nueva === vieja
-      ){
-
-        return true;
-
-      }
-
-
-      /*
-        Una contiene completamente
-        a la otra.
-
-        Evita casos donde Chrome
-        devuelve primero:
-
-        "computadora una"
-
-        y luego:
-
-        "computadora una"
-      */
-
-      if(
-        vieja.length > 4
-
-        &&
-
-        nueva.length > 4
-
-        &&
-
-        (
-          vieja === nueva
-
-          ||
-
-          (
-            vieja.includes(
-              nueva
-            )
-
-            &&
-
-            nueva.length /
-            vieja.length
-            >
-            .8
-          )
-
-          ||
-
-          (
-            nueva.includes(
-              vieja
-            )
-
-            &&
-
-            vieja.length /
-            nueva.length
-            >
-            .8
-          )
-        )
-      ){
-
-        return true;
-
-      }
-
-
-      return false;
-
-    }
-
-  );
-
-}
-
-
-/* ==================================
-   RECONSTRUIR TEXTO
-================================== */
-
-
-function actualizarCuadro(){
-
-  const partes =
-    [];
-
-
-  if(
-    textoInicial.trim() !== ""
-  ){
-
-    partes.push(
-      textoInicial.trim()
-    );
-
-  }
-
-
-  frasesSesion.forEach(
-
-    frase => {
-
-      if(
-        frase.trim() !== ""
-      ){
-
-        partes.push(
-          frase.trim()
-        );
-
-      }
-
-    }
-
-  );
-
-
-  input.value =
-    partes.join(
-      " "
-    );
-
-}
-
-
-/* ==================================
-   VOZ PARA LEER
-================================== */
+/* ===============================
+   LEER TAREAS
+================================ */
 
 
 function hablar(texto){
@@ -1506,11 +1239,6 @@ function hablar(texto){
   );
 
 }
-
-
-/* ==================================
-   LEER TAREAS
-================================== */
 
 
 function leerTareas(){
@@ -1573,9 +1301,9 @@ function leerTareas(){
 }
 
 
-/* ==================================
-   RECONOCIMIENTO DE VOZ
-================================== */
+/* ===============================
+   DICTADO COMPATIBLE
+================================ */
 
 
 const SpeechRecognition =
@@ -1587,6 +1315,127 @@ const SpeechRecognition =
   window.webkitSpeechRecognition;
 
 
+function mostrarEscuchando(){
+
+  escuchando =
+    true;
+
+
+  btnVoz.textContent =
+    "⛔ Detener";
+
+
+  btnVoz.classList.add(
+    "escuchando"
+  );
+
+
+  estadoVoz.textContent =
+    "🎙️ Escuchando... di una frase";
+
+
+  estadoVoz.className =
+    "escuchando";
+
+}
+
+
+function mostrarReposo(){
+
+  escuchando =
+    false;
+
+
+  btnVoz.textContent =
+    "🎙️ Hablar";
+
+
+  btnVoz.classList.remove(
+    "escuchando"
+  );
+
+}
+
+
+function escribirFrase(frase){
+
+  frase =
+    frase.trim();
+
+
+  if(
+    frase === ""
+  ){
+
+    return;
+
+  }
+
+
+  /*
+    Evita que Chrome entregue
+    exactamente la misma frase dos veces.
+  */
+
+
+  if(
+    frase.toLowerCase()
+    ===
+    ultimoResultado.toLowerCase()
+  ){
+
+    return;
+
+  }
+
+
+  ultimoResultado =
+    frase;
+
+
+  const anterior =
+    input.value.trim();
+
+
+  if(
+    anterior === ""
+  ){
+
+    input.value =
+      frase;
+
+  }
+
+  else{
+
+    input.value =
+      anterior
+      +
+      " "
+      +
+      frase;
+
+  }
+
+
+  estadoVoz.textContent =
+
+    '✍️ Escribí: "'
+    +
+    frase
+    +
+    '"';
+
+
+  estadoVoz.className =
+    "correcto";
+
+}
+
+
+/* CONFIGURACIÓN TEMI */
+
+
 if(
   SpeechRecognition
 ){
@@ -1595,58 +1444,37 @@ if(
     new SpeechRecognition();
 
 
-  reconocimiento.lang =
-    "es-SV";
+  /*
+    Una frase por toque.
+  */
+
+
+  reconocimiento.continuous =
+    false;
 
 
   /*
-    Lo dejamos continuo,
-    PERO NO lo reiniciamos
-    automáticamente.
+    Solo resultado final.
+    Mucho más compatible.
   */
-
-  reconocimiento.continuous =
-    true;
 
 
   reconocimiento.interimResults =
-    true;
+    false;
 
 
   reconocimiento.maxAlternatives =
     1;
 
 
+  reconocimiento.lang =
+    "es-SV";
+
+
   reconocimiento.onstart =
     function(){
 
-      escuchando =
-        true;
-
-
-      textoInicial =
-        input.value.trim();
-
-
-      frasesSesion =
-        [];
-
-
-      btnVoz.textContent =
-        "⛔ Detener";
-
-
-      btnVoz.classList.add(
-        "escuchando"
-      );
-
-
-      estadoVoz.textContent =
-        "🎙️ Escuchando... habla ahora";
-
-
-      estadoVoz.className =
-        "escuchando";
+      mostrarEscuchando();
 
     };
 
@@ -1654,87 +1482,29 @@ if(
   reconocimiento.onresult =
     function(evento){
 
-      let temporal =
-        "";
-
-
-      for(
-
-        let i =
-          evento.resultIndex;
-
-        i <
-        evento.results.length;
-
-        i++
-
-      ){
+      try{
 
         const frase =
           evento
-            .results[i][0]
+            .results[0][0]
             .transcript
             .trim();
 
 
-        if(
-          evento
-            .results[i]
-            .isFinal
-        ){
-
-          /*
-            SOLO guardamos
-            si NO está repetida.
-          */
-
-          if(
-            !fraseYaExiste(
-              frase
-            )
-          ){
-
-            frasesSesion.push(
-              frase
-            );
-
-
-            actualizarCuadro();
-
-          }
-
-        }
-
-        else{
-
-          temporal +=
-            frase
-            +
-            " ";
-
-        }
+        escribirFrase(
+          frase
+        );
 
       }
 
+      catch(error){
 
-      if(
-        temporal.trim() !== ""
-      ){
+        estadoVoz.textContent =
+          "⚠️ Escuché audio pero no pude obtener el texto";
 
-        provisional.textContent =
 
-          '🎙️ Entendiendo: "'
-          +
-          temporal.trim()
-          +
-          '"';
-
-      }
-
-      else{
-
-        provisional.textContent =
-          "";
+        estadoVoz.className =
+          "error";
 
       }
 
@@ -1768,14 +1538,45 @@ if(
 
       }
 
-
-      if(
+      else if(
         evento.error ===
         "no-speech"
       ){
 
         estadoVoz.textContent =
-          "No escuché nada";
+          "No escuché ninguna frase. Intenta de nuevo.";
+
+
+        estadoVoz.className =
+          "error";
+
+      }
+
+      else if(
+        evento.error ===
+        "aborted"
+      ){
+
+        estadoVoz.textContent =
+          "⛔ Escucha cancelada";
+
+
+        estadoVoz.className =
+          "";
+
+      }
+
+      else{
+
+        estadoVoz.textContent =
+
+          "⚠️ Error de micrófono: "
+          +
+          evento.error;
+
+
+        estadoVoz.className =
+          "error";
 
       }
 
@@ -1785,38 +1586,33 @@ if(
   reconocimiento.onend =
     function(){
 
-      escuchando =
-        false;
+      mostrarReposo();
 
 
-      btnVoz.textContent =
-        "🎙️ Hablar";
+      /*
+        Si ya escribió algo,
+        conservamos ese mensaje.
+      */
 
 
-      btnVoz.classList.remove(
-        "escuchando"
-      );
+      if(
+        estadoVoz.className !==
+        "correcto"
+      ){
 
+        estadoVoz.textContent =
+          "Toca 🎙️ Hablar para dictar otra frase";
 
-      provisional.textContent =
-        "";
-
-
-      estadoVoz.textContent =
-        "✅ Dictado terminado. Revisa el texto y toca Agregar";
-
-
-      estadoVoz.className =
-        "correcto";
+      }
 
     };
 
 }
 
 
-/* ==================================
-   BOTÓN HABLAR / DETENER
-================================== */
+/* ===============================
+   BOTÓN HABLAR
+================================ */
 
 
 function comenzarOParar(){
@@ -1826,7 +1622,7 @@ function comenzarOParar(){
   ){
 
     estadoVoz.textContent =
-      "⚠️ Este navegador no admite dictado por voz";
+      "⚠️ Este navegador no admite reconocimiento de voz";
 
 
     estadoVoz.className =
@@ -1838,13 +1634,19 @@ function comenzarOParar(){
   }
 
 
+  /*
+    Si está escuchando,
+    cancelamos inmediatamente.
+  */
+
+
   if(
     escuchando
   ){
 
     try{
 
-      reconocimiento.stop();
+      reconocimiento.abort();
 
     }
 
@@ -1852,6 +1654,8 @@ function comenzarOParar(){
 
     }
 
+
+    mostrarReposo();
 
     return;
 
@@ -1866,14 +1670,21 @@ function comenzarOParar(){
 
   catch(error){
 
+    estadoVoz.textContent =
+      "Espera un momento y vuelve a tocar Hablar";
+
+
+    estadoVoz.className =
+      "error";
+
   }
 
 }
 
 
-/* ==================================
+/* ===============================
    MÚSICA
-================================== */
+================================ */
 
 
 function abrirMusica(){
@@ -1884,9 +1695,9 @@ function abrirMusica(){
 }
 
 
-/* ==================================
+/* ===============================
    RELOJ
-================================== */
+================================ */
 
 
 function actualizarReloj(){
@@ -1935,9 +1746,9 @@ function actualizarReloj(){
 }
 
 
-/* ==================================
-   AVISO
-================================== */
+/* ===============================
+   AVISOS
+================================ */
 
 
 let tiempoAviso;
@@ -1984,9 +1795,9 @@ function mostrarAviso(texto){
 }
 
 
-/* ==================================
+/* ===============================
    EVENTOS
-================================== */
+================================ */
 
 
 btnVoz.onclick =
@@ -2016,15 +1827,7 @@ btnBorrarDictado.onclick =
       "";
 
 
-    textoInicial =
-      "";
-
-
-    frasesSesion =
-      [];
-
-
-    provisional.textContent =
+    ultimoResultado =
       "";
 
 
@@ -2035,9 +1838,9 @@ btnBorrarDictado.onclick =
   };
 
 
-/* ==================================
+/* ===============================
    INICIO
-================================== */
+================================ */
 
 
 cargar();
@@ -2057,7 +1860,5 @@ setInterval(
 
 </script>
 
-
 </body>
-
 </html>
